@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>About · Chopper Noise</title>
+<meta name="description" content="Why Chopper Noise maps helicopter noise over New York City and the Hudson waterfront, and how it was built.">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="stylesheet" href="css/site.css?v=20261005n">
+<script src="js/site.js?v=20261005n" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-chrome="masthead"></header>
+
+<main id="main" class="document wrap">
+  <h1>About</h1>
+  <p class="lead">Chopper Noise combines recorded helicopter flights, certified noise levels and Census counts to show who hears helicopters over New York City and the Hudson waterfront.</p>
+
+  <section>
+    <h2>Why</h2>
+    <p>Helicopters fly low over New York City and the Hudson waterfront. Tours and charters share that air with police, medical and military flights. This site counts the residents who hear each flight, and how many flights each block hears in a day. It keeps non-essential and public-service flights apart.</p>
+  </section>
+
+  <section>
+    <h2>Scope</h2>
+    <p>The map replays three recorded days in August and September 2026. Loudness is modeled from each flight's position and helicopter type. Residents are counted by 2020 Census block, in New York City and the New Jersey blocks nearby. The site shows no registration or owner for any aircraft. The <a href="data.html">Data page</a> has the sources, the method and the limits.</p>
+  </section>
+
+  <section>
+    <h2>Built</h2>
+    <p>A static website using MapLibre GL JS, with OpenFreeMap tiles. A Python pipeline, using only the standard library, reads the flight archives, models each flight's peak level at every Census block and writes the files the map reads. The browser repeats the pipeline's level formula as it replays a day. The site uses no account system or analytics.</p>
+  </section>
+
+  <section>
+    <h2>Independence</h2>
+    <p>No agency reviewed this site.</p>
+  </section>
+
+  <section>
+    <h2>Credits</h2>
+    <p>Flight tracks from adsb.lol and the people who feed it. Data from the U.S. Census Bureau, the Federal Aviation Administration, the Iowa Environmental Mesonet and the UK Civil Aviation Authority. Claude was used in development. Map data from OpenStreetMap contributors, with tiles from OpenFreeMap.</p>
+  </section>
+
+  <section>
+    <h2>Reuse</h2>
+    <p>Code is BSD 3-Clause licensed. Compiled data can be reused with attribution; the source data retain their own terms. Carry the day and the level, such as 60+ dBA, and say the figure is modeled when republishing it. The download is on the <a href="data.html">Data page</a>.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>The <a href="https://github.com/jaramana/choppernoise.publicworks.nyc">source is on GitHub</a>. <a href="https://github.com/jaramana/choppernoise.publicworks.nyc/issues">Report an issue</a> there. For a data issue, include the day, the time and the place on the map.</p>
+  </section>
+</main>
+
+<footer data-chrome="footer"></footer>
+</body>
+</html>

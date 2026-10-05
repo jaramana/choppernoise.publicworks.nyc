@@ -1,0 +1,12 @@
+data-raw/
+build/
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+
+# Working notes, kept local
+project.rtf
+
+# Local editor and preview settings
+.claude/

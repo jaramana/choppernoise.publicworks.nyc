@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Chopper Noise</title>
+<meta name="description" content="A map of helicopter noise over New York City and the Hudson waterfront. Recorded flights, replayed with modeled loudness for the residents of every Census block below.">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="css/site.css?v=20261005n">
+<script src="js/site.js?v=20261005n" defer></script>
+<script src="vendor/maplibre-gl.js" defer></script>
+<script src="js/model.js?v=20261005n" defer></script>
+<script src="js/map.js?v=20261005n" defer></script>
+</head>
+<body class="app-page">
+<a class="skip" href="#panel">Skip to the readout</a>
+<header data-chrome="masthead"></header>
+
+<!-- On a wide screen the page does not scroll. The panel on the left holds
+     the controls and the numbers and scrolls on its own; the map fills the
+     rest. On a narrow screen the map comes first and the panel follows. -->
+<main id="main" class="atlas">
+  <aside class="rail" id="panel" aria-label="Map readout" tabindex="-1">
+    <div class="rail-head">
+      <h1 class="rail-title">Who hears the helicopters?</h1>
+    </div>
+
+    <div class="rail-tools">
+      <div class="when">
+        <label class="sr-only" for="day">Day</label>
+        <select class="day-select" id="day"></select>
+        <button type="button" class="live" disabled><span class="live-dot" aria-hidden="true"></span>Live</button>
+      </div>
+      <div class="seg" id="views" role="group" aria-label="View">
+        <button type="button" data-view="replay" aria-pressed="true">Replay</button>
+        <button type="button" data-view="whole-day" aria-pressed="false">Whole day</button>
+      </div>
+      <div class="chips" id="groups" role="group" aria-label="Flights shown">
+        <button type="button" class="chip" data-group="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-group="non-essential" aria-pressed="false"><span class="dot non-essential"></span>Non-essential</button>
+        <button type="button" class="chip" data-group="public service" aria-pressed="false"><span class="dot public-service"></span>Public service</button>
+      </div>
+    </div>
+
+    <div class="rail-scroll">
+      <!-- Both views fill the same sections: the lead number and levels,
+           then flights by category. -->
+      <section class="readout" id="summary" aria-label="Residents"></section>
+      <section class="readout" id="flights"></section>
+
+      <footer data-chrome="footer" data-compact></footer>
+    </div>
+  </aside>
+
+  <div class="stage-wrap">
+    <div class="stage">
+      <div class="map" id="map" role="region"
+           aria-label="Map of helicopter flights and the residents below them. The panel lists the same flights and numbers."></div>
+      <div class="map-message" id="map-message" role="status">Clearing the airspace…</div>
+      <div class="map-tip" id="map-tip" hidden></div>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <button type="button" class="play" id="play" aria-label="Play"></button>
+      <div class="clock-box">
+        <output class="clock" id="clock" aria-live="off">—</output>
+        <span class="pace" id="pace">1 minute every 2 seconds</span>
+      </div>
+      <div class="scrub" id="scrub">
+        <svg class="spark" id="spark" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <input type="range" id="time" min="0" max="86390" step="10" value="0" aria-label="Time of day">
+        <div class="ticks" aria-hidden="true"><span>12 am</span><span>6 am</span><span>Noon</span><span>6 pm</span><span>12 am</span></div>
+      </div>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="wrap">The map needs JavaScript. The <a href="data.html">Data page</a> has the files and the method.</p>
+  </noscript>
+</main>
+</body>
+</html>

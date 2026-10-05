@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Data · Chopper Noise</title>
+<meta name="description" content="The sources, method and limits behind Chopper Noise, and the metadata download.">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="stylesheet" href="css/site.css?v=20261005n">
+<script src="js/site.js?v=20261005n" defer></script>
+<script src="js/data.js?v=20261005n" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-chrome="masthead"></header>
+
+<main id="main" class="document wrap">
+  <h1>Data</h1>
+  <p class="lead">Where the flights and the residents come from, and how the map turns them into loudness.</p>
+
+  <section id="downloads">
+    <h2>Downloads</h2>
+    <div class="downloads">
+      <a class="download" href="data/meta.json" download>
+        <h3>Metadata</h3>
+        <p>Sample days, levels, model constants and the level of each helicopter type, as JSON.</p>
+      </a>
+    </div>
+    <details class="columns">
+      <summary>Columns</summary>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Key</th><th scope="col">What it holds</th></tr></thead>
+          <tbody>
+            <tr><td><code>built</code></td><td>The date the pipeline last wrote the site files</td></tr>
+            <tr><td><code>days</code></td><td>Each sample day, its weekday and its number of flights</td></tr>
+            <tr><td><code>bands</code></td><td>The four levels, in dBA</td></tr>
+            <tr><td><code>event_bands</code></td><td>The levels at which the map counts flights heard per block</td></tr>
+            <tr><td><code>event_steps</code></td><td>The thresholds for flights heard in a day, such as 10+</td></tr>
+            <tr><td><code>groups</code></td><td>The categories in each group</td></tr>
+            <tr><td><code>regions</code></td><td>The two areas residents are counted in</td></tr>
+            <tr><td><code>model</code></td><td>The level formula's constants (reference distance, air absorption, minimum distance) and the grid the map uses to find nearby blocks</td></tr>
+            <tr><td><code>types</code></td><td>For each type code, the level at 150 m (<code>l150</code>), the distance in metres to each level (<code>reach</code>) and the type whose level it uses (<code>basis</code>)</td></tr>
+            <tr><td><code>names</code></td><td>The name shown for each type code</td></tr>
+            <tr><td><code>bbox</code></td><td>The box around the city, in degrees. Flights and New Jersey blocks are kept inside it.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">The type <code>unknown</code> covers transponders that send no type.</p>
+    </details>
+    <p class="data-note" id="built" hidden></p>
+    <p class="data-note">Free to reuse with attribution. adsb.lol publishes its archive under the <a href="https://opendatacommons.org/licenses/odbl/1-0/">Open Database License</a>. Cite Chopper Noise, choppernoise.publicworks.nyc, with the day and the level.</p>
+  </section>
+
+  <section id="sources">
+    <h2>Sources</h2>
+    <div class="table-wrap stack">
+      <table>
+        <thead><tr><th scope="col">Source</th><th scope="col">Used for</th><th scope="col">Period</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><a href="https://github.com/adsblol/globe_history_2026">Flight archive</a>, adsb.lol</td>
+            <td>Helicopter positions, types, owner names and privacy flags</td>
+            <td id="source-days">Three days in August and September 2026</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html">2020 Census blocks</a>, U.S. Census Bureau</td>
+            <td>Residents, and a point inside each block</td>
+            <td>2020 Census</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download">Aircraft registry</a>, Federal Aviation Administration</td>
+            <td>Seats in each registered aircraft</td>
+            <td>Files dated 2 October 2026</td>
+          </tr>
+          <tr>
+            <td><a href="https://mesonet.agron.iastate.edu/request/download.phtml">LaGuardia hourly weather</a>, Iowa Environmental Mesonet</td>
+            <td>Air pressure, to correct altitudes</td>
+            <td>The same days</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.caa.co.uk/commercial-industry/aircraft/airworthiness/type-certificate-and-type-approval-data-sheets/part-21/noise-certificates/aircraft-noise-certificate/">Helicopter noise database</a>, UK Civil Aviation Authority</td>
+            <td>The certified flyover level of each type</td>
+            <td>Edition of 1 September 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="process">
+    <h2>Process</h2>
+    <ol class="process">
+      <li>
+        <h3>Collect</h3>
+        <p>We download adsb.lol's archive for each sample day. An archive holds one UTC day of every aircraft it received worldwide, so a New York day needs two. We keep helicopters seen inside a box around the city and the Hudson waterfront, below 3,000 feet.</p>
+      </li>
+      <li>
+        <h3>Check</h3>
+        <p>We count every aircraft over the city in each local hour. An hour with none means the archive has a gap, so we choose another day. 1 August was dropped because its archive has no data from noon to 8 pm.</p>
+      </li>
+      <li>
+        <h3>Match</h3>
+        <p>Residents come from the 2020 Census, placed at one point inside each block: all of New York City, and the New Jersey blocks inside the box. Seats come from the FAA registry. An aircraft without a US registration takes the median for its type.</p>
+      </li>
+      <li>
+        <h3>Classify</h3>
+        <p>We correct altitudes with LaGuardia's hourly air pressure and split each aircraft's day into flights at landings and long gaps. Military, police and medical flights are public service, known by the aircraft's flags and owner name. Tours and charters are non-essential. A tour starts or ends at a tour base or loops back, passes the Statue of Liberty, stays inside the map and lasts under 45 minutes, in a light single-engine type. Any other flight is a charter.</p>
+      </li>
+      <li>
+        <h3>Calculate</h3>
+        <p>Each type gets a peak level at 150 metres from its certified flyover level. Every 10 seconds along a flight, we find the level at each block within reach and count the residents at 50, 60, 70 and 80 dBA. Each block also gets a count of the flights that reached it at each level during the day.</p>
+      </li>
+      <li>
+        <h3>Publish</h3>
+        <p>We write the files the map reads. No registration, owner or transponder address leaves the pipeline, and flights are numbered within each day.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="loudness">
+    <h2>Loudness</h2>
+    <p>Levels are peaks in A-weighted decibels (dBA), the loudest moment as a helicopter passes. Each 10 dB sounds about twice as loud, so the map's rows count up in doublings from 50.</p>
+    <div class="table-wrap levels">
+      <table>
+        <thead><tr><th scope="col"><span class="sr-only">Face</span></th><th scope="col">Level</th><th scope="col">On the map</th><th scope="col">About as loud as</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><svg class="face b50" viewBox="0 0 20 20" aria-hidden="true"><circle class="disc" cx="10" cy="10" r="9"/><g class="feat"><circle cx="7" cy="8.6" r="1.15"/><circle cx="13" cy="8.6" r="1.15"/><path d="M7 13.3h6"/></g></svg></td>
+            <td class="nowrap">50+ dBA</td><td>audible</td><td>moderate rain</td>
+          </tr>
+          <tr>
+            <td><svg class="face b60" viewBox="0 0 20 20" aria-hidden="true"><circle class="disc" cx="10" cy="10" r="9"/><g class="feat"><path d="M5.7 6.7h3M11.3 6.7h3"/><circle cx="7.2" cy="9.1" r="1.1"/><circle cx="12.8" cy="9.1" r="1.1"/><path d="M7.3 14l5.4-.9"/></g></svg></td>
+            <td class="nowrap">60+ dBA</td><td>2× as loud</td><td>a conversation</td>
+          </tr>
+          <tr>
+            <td><svg class="face b70" viewBox="0 0 20 20" aria-hidden="true"><circle class="disc" cx="10" cy="10" r="9"/><g class="feat"><path d="M5.1 5.6l3.7 1.9M14.9 5.6l-3.7 1.9"/><circle cx="7.3" cy="9.6" r="1.1"/><circle cx="12.7" cy="9.6" r="1.1"/><path d="M6.6 14.7q3.4-3 6.8 0"/></g></svg></td>
+            <td class="nowrap">70+ dBA</td><td>4× as loud</td><td>a vacuum cleaner</td>
+          </tr>
+          <tr>
+            <td><svg class="face b80" viewBox="0 0 20 20" aria-hidden="true"><circle class="disc" cx="10" cy="10" r="9"/><g class="feat"><path d="M5.7 7.1l2.9 1.7-2.9 1.7M14.3 7.1l-2.9 1.7 2.9 1.7"/><path d="M6 14.1l1.6-1.3 1.6 1.3 1.6-1.3 1.6 1.3 1.6-1.3"/></g></svg></td>
+            <td class="nowrap">80+ dBA</td><td>8× as loud</td><td>a garbage disposal</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Headline counts start at 60 dBA. The 50 dBA row marks presence, a helicopter you can hear. It is gray on the map and never leads a count.</p>
+    <p>“Heard 10+ flights” counts flights, not minutes. A block heard a flight at a level when that flight's peak there reached it. Airport noise reports in Australia use the same count, called N60 or N70.</p>
+
+    <details>
+      <summary>Exact formulas</summary>
+      <p>The level at a block, from a helicopter at slant distance <i>r</i> metres:</p>
+      <p class="formula">L(r) = L150 − 20 log10(r / 150) − 2 × (r − 150) / 1000</p>
+      <p>L150 is the type's peak level at 150 m. The middle term is spherical spreading. The last is air absorption at 2 dB per km, the ISO 9613-1 value near 500 Hz on a mild, humid day. <i>r</i> is never less than 30 m.</p>
+      <p>Light types are certified in SEL and heavier types in EPNL, both at 150 m. We take the median certified level for each type and convert it to a peak:</p>
+      <p class="formula">L150 = SEL − 10 log10(π × 150 / 55)<br>     = SEL − 9.3<br>SEL  = EPNL − 2.7</p>
+      <p>55 m/s is the certification flyover speed for light types. 2.7 dB is the median gap between EPNL and SEL across the 12 types the database certifies both ways.</p>
+      <p>Altitude above sea level comes from the reported pressure altitude:</p>
+      <p class="formula">altitude = pressure altitude + (altimeter − 29.92 inHg) × 927 ft</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Type</th><th scope="col" class="num">dBA at 150 m</th><th scope="col" class="num">60 dBA within</th></tr></thead>
+          <tbody id="type-rows"></tbody>
+        </table>
+      </div>
+      <p class="fine">Distances are straight-line from the helicopter, not along the ground.</p>
+    </details>
+  </section>
+
+  <section id="limits">
+    <h2>Limits</h2>
+    <ul>
+      <li>Levels are modeled outdoor peaks, not measurements. No measured flyover has checked them yet.</li>
+      <li>The model ignores buildings, which block and reflect sound, and the way a helicopter is louder ahead of it than behind.</li>
+      <li>Height is altitude above sea level, corrected from pressure altitude, not height above the ground. Most of the city sits below 60 metres.</li>
+      <li>Residents are counted where they live, by 2020 Census block, in New York City and the nearby New Jersey blocks. Nassau and Westchester residents are not counted.</li>
+      <li>The map covers three days: two summer weekend days and one September weekday. They are samples, not an average.</li>
+      <li>Riders are an upper bound, certified seats minus one pilot. Many charter cabins hold fewer people. A flight with no seat count adds nothing to the total; a missing count is not zero riders.</li>
+      <li>Categories rest on owner names and flight shape, because many tour operators withhold their names. A police or medical aircraft without a matching owner name counts as a charter, and so does a tour that leaves the map or runs past 45 minutes.</li>
+    </ul>
+  </section>
+</main>
+
+<footer data-chrome="footer"></footer>
+</body>
+</html>
