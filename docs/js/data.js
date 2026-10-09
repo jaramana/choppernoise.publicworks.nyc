@@ -38,7 +38,6 @@
     HO.load('meta.json').then(function (meta) {
       var built = document.getElementById('built');
       built.textContent = 'Data built ' + fmt.date(meta.built) + '.';
-      built.hidden = false;
       document.getElementById('source-days').textContent = dayList(meta.days);
       document.getElementById('type-rows').innerHTML = typeRows(meta);
     }).catch(function () {

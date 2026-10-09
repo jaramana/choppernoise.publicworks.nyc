@@ -186,9 +186,10 @@ main { padding-bottom: 5rem; }
   display: grid; gap: 1.5rem;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
 }
-.footer h4 {
+/* Column titles are h2 for the outline and look like small labels. */
+.footer .footer-head {
   font-size: .75rem; text-transform: uppercase; letter-spacing: .09em;
-  color: var(--ink-faint); margin: 0 0 .5rem;
+  color: var(--ink-faint); margin: 0 0 .5rem; line-height: 1.6;
 }
 .footer ul { list-style: none; padding: 0; margin: 0; }
 .footer li { margin-bottom: .25rem; }
@@ -531,3 +532,9 @@ details[open] > summary { margin-bottom: .75rem; }
   .stage-wrap { order: 0; }
   .rail { order: 1; }
 }
+/* ---- Stable first paint ---------------------------------------- */
+/* The masthead is drawn by script. Until it is, its slot holds the height it
+   will have at that width: one row, or the nav wrapping to two. */
+header[data-chrome="masthead"]:empty { display: block; min-height: 52.83px; }
+@media (max-width: 22.2rem) { header[data-chrome="masthead"]:empty { min-height: 104.83px; } }
+

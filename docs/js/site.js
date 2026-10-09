@@ -156,21 +156,21 @@
       foot.className = 'footer';
       foot.innerHTML =
         '<div class="wrap"><div class="footer-grid">' +
-          '<div><h4>Views</h4><ul>' +
+          '<div><h2 class="footer-head">Views</h2><ul>' +
             '<li><a href="index.html">Map</a></li>' +
           '</ul></div>' +
-          '<div><h4>Reference</h4><ul>' +
+          '<div><h2 class="footer-head">Reference</h2><ul>' +
             '<li><a href="data.html">Data</a></li>' +
             '<li><a href="about.html">About</a></li>' +
           '</ul></div>' +
-          '<div><h4>Sources</h4><ul>' +
+          '<div><h2 class="footer-head">Sources</h2><ul>' +
             '<li><a href="https://adsb.lol/">adsb.lol flight archive</a></li>' +
             '<li><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html">Census 2020 blocks</a></li>' +
             '<li><a href="https://registry.faa.gov/">FAA aircraft registry</a></li>' +
             '<li><a href="https://mesonet.agron.iastate.edu/request/download.phtml">Iowa Environmental Mesonet</a></li>' +
             '<li><a href="https://www.caa.co.uk/">UK CAA noise database</a></li>' +
           '</ul></div>' +
-          '<div><h4>Project</h4><ul>' +
+          '<div><h2 class="footer-head">Project</h2><ul>' +
             '<li><a href="' + REPO + '">Source on GitHub</a></li>' +
             '<li><a href="' + REPO + '/issues">Report an error</a></li>' +
           '</ul></div>' +
