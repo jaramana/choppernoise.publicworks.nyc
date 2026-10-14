@@ -25,8 +25,16 @@ REQUEST_TIMEOUT = 60
 # ---------------------------------------------------------------------------
 # Days are New York local days. Each adsb.lol archive covers one UTC day, so a
 # local day needs its own archive and the next one.
+#
+# The October week is the latest full week when it was added, taken whole. A
+# day with a local hour of no aircraft fails the coverage check. It moves to
+# DROPPED with the reason, and no other day replaces it. The Data page reads
+# a reason as "its archive has <reason>".
 
-DAYS = ["2026-08-02", "2026-08-15", "2026-09-16"]
+DAYS =["2026-08-02", "2026-08-15", "2026-09-16",
+        "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08",
+        "2026-10-09", "2026-10-10", "2026-10-11"]
+DROPPED = {"2026-08-01": "no data from noon to 8 pm"}
 TIMEZONE = "America/New_York"
 
 # Coverage is checked on one trace in this many. Every aircraft counts, so a

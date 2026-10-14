@@ -167,6 +167,8 @@ def main():
     sizes["meta.json"] = write("meta.json", {
         "built": datetime.now().date().isoformat(),
         "days": days,
+        "dropped": [{"day": d, "weekday": date.fromisoformat(d).strftime("%A"), "reason": why}
+                    for d, why in sorted(cfg.DROPPED.items())],
         "step": cfg.STEP_S,
         "bands": cfg.BANDS,
         "event_bands": EVENT_BANDS,

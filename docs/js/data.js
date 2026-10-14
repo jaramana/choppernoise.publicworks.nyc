@@ -1,21 +1,52 @@
 /* Chopper Noise (choppernoise.publicworks.nyc) / the Data page
    ------------------------------------------------------------------
-   Fills the build date, the sample days and the type levels from
-   meta.json, so none of them is typed by hand. Loads after site.js. */
+   Fills the build date, the sample days, the dropped days and the type
+   levels from meta.json, so none of them is typed by hand. Loads after
+   site.js. */
 
 (function () {
   'use strict';
 
   var fmt = HO.fmt;
 
-  // Sunday 2 August, Saturday 15 August and Wednesday 16 September 2026.
+  // Sunday 2 August as a label, without the year.
+  function label(d) {
+    return d.weekday + ' ' + fmt.date(d.day).replace(/ \d{4}$/, '');
+  }
+
+  function nextDay(iso) {
+    return new Date(Date.parse(iso + 'T00:00:00Z') + 864e5).toISOString().slice(0, 10);
+  }
+
+  // Three or more days in a row read as one span:
+  // Sunday 2 August, Wednesday 16 September and Monday 5 to Sunday 11 October 2026.
   function dayList(days) {
-    var names = days.map(function (d) {
-      return d.weekday + ' ' + fmt.date(d.day).replace(/ \d{4}$/, '');
+    var parts = [], run = [];
+    function flush() {
+      var a = run[0], b = run[run.length - 1];
+      if (run.length < 3) {
+        run.forEach(function (d) { parts.push(label(d)); });
+      } else {
+        var start = a.day.slice(0, 7) === b.day.slice(0, 7) ? a.weekday + ' ' + +a.day.slice(8) : label(a);
+        parts.push(start + ' to ' + label(b));
+      }
+      run = [];
+    }
+    days.forEach(function (d) {
+      if (run.length && nextDay(run[run.length - 1].day) !== d.day) flush();
+      run.push(d);
     });
-    var last = names.pop();
+    flush();
+    var last = parts.pop();
     var year = days[days.length - 1].day.slice(0, 4);
-    return (names.length ? names.join(', ') + ' and ' : '') + last + ' ' + year;
+    return (parts.length ? parts.join(', ') + ' and ' : '') + last + ' ' + year;
+  }
+
+  // One sentence per day the coverage check dropped.
+  function droppedList(dropped) {
+    return dropped.map(function (d) {
+      return d.weekday + ' ' + fmt.date(d.day) + ' was dropped because its archive has ' + d.reason + '.';
+    }).join(' ');
   }
 
   // Loudest first. A type that borrows another's level says which.
@@ -39,6 +70,7 @@
       var built = document.getElementById('built');
       built.textContent = 'Data built ' + fmt.date(meta.built) + '.';
       document.getElementById('source-days').textContent = dayList(meta.days);
+      if (meta.dropped) document.getElementById('dropped-days').textContent = droppedList(meta.dropped);
       document.getElementById('type-rows').innerHTML = typeRows(meta);
     }).catch(function () {
       document.getElementById('type-rows').innerHTML =

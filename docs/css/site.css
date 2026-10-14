@@ -24,12 +24,13 @@
   --warn:         #b4520a;
   --warn-soft:    #fdf0e4;
 
-  /* Loudness, one orange ramp: 60, 70 and 80 dBA. 50 is a neutral slate,
-     because it marks presence rather than harm. */
+  /* Loudness, one ramp from orange to near-black brown: 60, 70 and 80 dBA.
+     70 sits at the perceptual midpoint (OKLab) of the other two. 50 is a
+     neutral slate, because it marks presence rather than harm. */
   --band-50: #8b95a7;
   --band-60: #de6f25;
-  --band-70: #b7470f;
-  --band-80: #7a2a08;
+  --band-70: #80411a;
+  --band-80: #2e170b;
 
 
   /* The two groups of flights. */

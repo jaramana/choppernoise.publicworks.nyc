@@ -10,7 +10,7 @@ levels.
 
 | Source | Used for |
 | --- | --- |
-| [adsb.lol flight archive](https://github.com/adsblol/globe_history_2026) | Helicopter positions, types, owner names and privacy flags on 2 August, 15 August and 16 September 2026 |
+| [adsb.lol flight archive](https://github.com/adsblol/globe_history_2026) | Helicopter positions, types, owner names and privacy flags on 2 August, 15 August and 16 September 2026, and every day from 5 to 11 October 2026 |
 | [Census Bureau 2020 TIGER/Line blocks](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html) | Residents and a point inside each block, New York and New Jersey |
 | [FAA aircraft registry](https://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download) | Certified seats for each registered aircraft (files dated 2 October 2026) |
 | [Iowa Environmental Mesonet ASOS archive](https://mesonet.agron.iastate.edu/request/download.phtml) | LaGuardia's hourly altimeter setting on the same days |
@@ -24,7 +24,8 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
   local day, and keep helicopters inside `BBOX` below 3,000 ft. The type
   designator decides what counts as a helicopter, with ADS-B category A7 as a
   fallback. An hourly coverage check flags archive gaps; 1 August was dropped for
-  one.
+  one. The October week is taken whole, and a day dropped from it is not
+  replaced.
 - Categories: stage 4 corrects altitudes with LaGuardia's altimeter setting,
   splits flights at landings and long gaps, and sets a category. Military comes
   from the readsb flag, police and medical from owner names, tours from flight
@@ -45,7 +46,7 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
   privacy address are counted like the rest.
 - Limits: levels are modeled outdoor peaks and have not yet been checked against
   a measured flyover. Buildings and directivity are ignored, height is above sea
-  level, and only three days are sampled.
+  level, and only ten days are sampled.
 
 The [Data page](https://choppernoise.publicworks.nyc/data.html) has the sources,
 steps, formulas and limits.

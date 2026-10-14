@@ -14,8 +14,9 @@
 
    Both views fill one panel: residents set against people aboard, the same
    four level rows, then flights by category. On the map a block is one dot
-   style, sized by residents. Orange shades mean 60, 70 and 80 dBA, faint
-   gray means 50, and rose and blue mark the two flight groups.
+   style, sized by residents. Orange darkening to near-black brown means 60,
+   70 and 80 dBA, faint gray means 50, and rose and blue mark the two
+   flight groups.
 
    The basemap is OpenFreeMap's Positron, trimmed and recolored before the
    map first draws. Layer order, bottom to top:
@@ -41,7 +42,7 @@
     building: '#f0eee9', buildingEdge: '#e4e1da', airport: '#eeede8',
     place: '#3f454c', neighborhood: '#6a7178',
     'non-essential': '#c4387a', 'public service': '#2a78d6',
-    band: { 50: '#8b95a7', 60: '#de6f25', 70: '#b7470f', 80: '#7a2a08' },
+    band: { 50: '#8b95a7', 60: '#de6f25', 70: '#80411a', 80: '#2e170b' },
     backdrop: '#7d8696', ink: '#16181d'
   };
 
@@ -81,7 +82,7 @@
   var HEADLINE = 60;     // the level the big numbers count from
   var REPEAT = 10;       // flights in a day that put a block on the whole-day map
   var SPEED = 30;        // seconds of the day per second of replay
-  var GLOW_TAU = 60;     // seconds of the day for a lit block to fade to a third
+  var GLOW_TAU = 15;     // seconds of the day for a lit block to fade to a third
   var TRAIL_STEPS = 24;  // four minutes of path behind each helicopter
   var BIN = 600;         // the timeline's bars are ten minutes wide
   var READOUT_MS = 120;  // the panel redraws at most this often
@@ -150,10 +151,19 @@
 
   function message(text) { $('map-message').textContent = text || ''; }
 
+  // The map opens on the middle day by flights, rounding up on an even
+  // count, so a rule picks it and it is neither the busiest nor the quietest.
+  function medianDay() {
+    var byFlights = meta.days.slice().sort(function (a, b) {
+      return a.flights - b.flights || a.day.localeCompare(b.day);
+    });
+    return byFlights[Math.floor(byFlights.length / 2)].day;
+  }
+
   function readParams() {
     var p = HO.params();
     var known = meta.days.map(function (d) { return d.day; });
-    state.day = known.indexOf(p.get('day')) > -1 ? p.get('day') : known[known.length - 1];
+    state.day = known.indexOf(p.get('day')) > -1 ? p.get('day') : medianDay();
     if (p.get('view') === 'whole-day') state.view = 'whole-day';
     var g = (p.get('group') || '').replace('-', ' ');
     if (g === 'non-essential' || g === 'public service') state.group = g;
@@ -941,7 +951,8 @@
       var f = state.view === 'replay' ? heliAt(e.point) : null;
       if (!f) { tip.hidden = true; return; }
       var it = current.items.filter(function (x) { return x.f === f; })[0];
-      tip.textContent = CATEGORY[f.cat] + ' · ' + typeName(f.type) + (it ? ' · ' + altitude(it.pos.alt) : '');
+      tip.textContent = CATEGORY[f.cat] + ' · ' + typeName(f.type) + (it ? ' · ' + altitude(it.pos.alt) : '') +
+        (f.riders ? ' · up to ' + f.riders + ' aboard' : '');
       tip.style.left = e.point.x + 'px';
       tip.style.top = e.point.y + 'px';
       tip.hidden = false;

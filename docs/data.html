@@ -11,9 +11,9 @@
 <meta property="og:description" content="The sources, method and limits behind Chopper Noise, and the metadata download.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#fbfaf7">
-<link rel="stylesheet" href="css/site.css?v=20261009">
-<script src="js/site.js?v=20261009" defer></script>
-<script src="js/data.js?v=20261009" defer></script>
+<link rel="stylesheet" href="css/site.css?v=20261014">
+<script src="js/site.js?v=20261014" defer></script>
+<script src="js/data.js?v=20261014" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -39,6 +39,7 @@
           <tbody>
             <tr><td><code>built</code></td><td>The date the pipeline last wrote the site files</td></tr>
             <tr><td><code>days</code></td><td>Each sample day, its weekday and its number of flights</td></tr>
+            <tr><td><code>dropped</code></td><td>Each day the coverage check dropped, its weekday and the gap in its archive</td></tr>
             <tr><td><code>bands</code></td><td>The four levels, in dBA</td></tr>
             <tr><td><code>event_bands</code></td><td>The levels at which the map counts flights heard per block</td></tr>
             <tr><td><code>event_steps</code></td><td>The thresholds for flights heard in a day, such as 10+</td></tr>
@@ -66,7 +67,7 @@
           <tr>
             <td><a href="https://github.com/adsblol/globe_history_2026">Flight archive</a>, adsb.lol</td>
             <td>Helicopter positions, types, owner names and privacy flags</td>
-            <td id="source-days">Three days in August and September 2026</td>
+            <td id="source-days">Ten days in August, September and October 2026</td>
           </tr>
           <tr>
             <td><a href="https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html">2020 Census blocks</a>, U.S. Census Bureau</td>
@@ -102,7 +103,7 @@
       </li>
       <li>
         <h3>Check</h3>
-        <p>We count every aircraft over the city in each local hour. An hour with none means the archive has a gap, so we choose another day. 1 August was dropped because its archive has no data from noon to 8 pm.</p>
+        <p>We count every aircraft over the city in each local hour. An hour with none means the archive has a gap, and we drop that day. We take the October week whole and do not replace a day dropped from it. <span id="dropped-days">Saturday 1 August 2026 was dropped because its archive has no data from noon to 8 pm.</span></p>
       </li>
       <li>
         <h3>Match</h3>
@@ -179,7 +180,7 @@
       <li>The model ignores buildings, which block and reflect sound, and the way a helicopter is louder ahead of it than behind.</li>
       <li>Height is altitude above sea level, corrected from pressure altitude, not height above the ground. Most of the city sits below 60 metres.</li>
       <li>Residents are counted where they live, by 2020 Census block, in New York City and the nearby New Jersey blocks. Nassau and Westchester residents are not counted.</li>
-      <li>The map covers three days: two summer weekend days and one September weekday. They are samples, not an average.</li>
+      <li>The map covers ten days: two summer weekend days, one September weekday and every day from 5 to 11 October, the latest full week when we added it. They are samples, not an average. Rain fell most of Sunday 11 October, and few helicopters flew.</li>
       <li>Riders are an upper bound, certified seats minus one pilot. Many charter cabins hold fewer people. A flight with no seat count adds nothing to the total; a missing count is not zero riders.</li>
       <li>Categories rest on owner names and flight shape, because many tour operators withhold their names. A police or medical aircraft without a matching owner name counts as a charter, and so does a tour that leaves the map or runs past 45 minutes.</li>
     </ul>
