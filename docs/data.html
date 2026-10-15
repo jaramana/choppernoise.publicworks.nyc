@@ -176,13 +176,19 @@
   <section id="limits">
     <h2>Limits</h2>
     <ul>
-      <li>Levels are modeled outdoor peaks, not measurements. No measured flyover has checked them yet.</li>
-      <li>The model ignores buildings, which block and reflect sound, and the way a helicopter is louder ahead of it than behind.</li>
-      <li>Height is altitude above sea level, corrected from pressure altitude, not height above the ground. Most of the city sits below 60 metres.</li>
+      <li>Levels are modeled, not measured. No measured flyover has checked them yet. Read each figure as an estimate.</li>
+      <li>The map does not show whether a flight broke a rule. A modeled level is not a legal noise reading.</li>
+      <li>Counts at 70 and 80 dBA are probably too low. The model checks each flight every 10 seconds, about 400 metres apart at a typical speed. The 80 dBA zone reaches only 53 to 266 metres from a helicopter, depending on type. A close pass can fall between checks and go uncounted.</li>
+      <li>We tested this on 16 September by checking every 2 seconds. Residents reached at 80+ dBA rose from about 131,000 to 275,000, and at 70+ from 4.2 to 4.9 million. At 60+ they rose by under 1%. The published counts still use the 10-second check, and even 2 seconds may be too coarse at 80 dBA.</li>
+      <li>Each block counts as one point at ground level, outdoors. A resident on an upper floor is closer to the helicopter. A resident indoors hears less.</li>
+      <li>Height is altitude above sea level, not height above the ground. Over higher ground the model puts the helicopter higher than it is, so it can understate the noise there.</li>
+      <li>The model ignores buildings, which block and reflect sound. It also ignores that a helicopter is louder ahead of it than behind.</li>
+      <li>Every position gets the certified flyover level, including takeoff, landing and hover. Those sound different from a pass.</li>
+      <li>The flight archive comes from volunteer receivers. A helicopter with its transponder off, or out of range, is missing. So is any stretch of a flight no receiver heard.</li>
+      <li>The map covers ten days: two summer weekend days, one September weekday and every day from 5 to 11 October, the latest full week when we added it. They are samples, not an average or a year. Rain fell most of Sunday 11 October, and few helicopters flew.</li>
       <li>Residents are counted where they live, by 2020 Census block, in New York City and the nearby New Jersey blocks. Nassau and Westchester residents are not counted.</li>
-      <li>The map covers ten days: two summer weekend days, one September weekday and every day from 5 to 11 October, the latest full week when we added it. They are samples, not an average. Rain fell most of Sunday 11 October, and few helicopters flew.</li>
       <li>Riders are an upper bound, certified seats minus one pilot. Many charter cabins hold fewer people. A flight with no seat count adds nothing to the total; a missing count is not zero riders.</li>
-      <li>Categories rest on owner names and flight shape, because many tour operators withhold their names. A police or medical aircraft without a matching owner name counts as a charter, and so does a tour that leaves the map or runs past 45 minutes.</li>
+      <li>Categories rest on owner names and flight shape, because many tour operators withhold their names. A police or medical aircraft without a matching owner name counts as a charter. So does a tour that leaves the map, runs past 45 minutes, or flies one way between heliports other than the three tour bases. Operators with mixed uses are not split.</li>
     </ul>
   </section>
 </main>

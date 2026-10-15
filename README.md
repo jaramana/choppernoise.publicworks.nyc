@@ -44,9 +44,13 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
 - Privacy: published files carry no registration, owner or transponder address,
   and flights are numbered within each day. Aircraft on the FAA's LADD list or a
   privacy address are counted like the rest.
-- Limits: levels are modeled outdoor peaks and have not yet been checked against
-  a measured flyover. Buildings and directivity are ignored, height is above sea
-  level, and only ten days are sampled.
+- Limits: levels are modeled outdoor peaks at one ground-level point per block
+  and have not yet been checked against a measured flyover. The 10-second
+  sampling can miss close passes, so counts at 70 and 80 dBA are probably low.
+  On 16 September, 2-second sampling raised residents reached at 80+ dBA from
+  about 131,000 to 275,000 and at 60+ by under 1%. Buildings and directivity
+  are ignored, height is above sea level, takeoff and hover use the flyover
+  level, volunteer receivers miss some flights, and only ten days are sampled.
 
 The [Data page](https://choppernoise.publicworks.nyc/data.html) has the sources,
 steps, formulas and limits.
