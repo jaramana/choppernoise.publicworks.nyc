@@ -120,6 +120,12 @@ def median_year(flights):
     return round(statistics.median(known)) if known else None
 
 
+def year_range(flights):
+    """[oldest, newest] year built among the aircraft that flew, or None."""
+    known = [f["year"] for f in flights if f["year"]]
+    return [min(known), max(known)] if known else None
+
+
 def by_category(flights):
     out = {}
     for f in flights:
@@ -143,7 +149,8 @@ def ranked_record(f):
     km = sum(math.hypot(b[1] - a[1], (b[2] - a[2]) * cfg.LON_SCALE) * 111.2
              for a, b in zip(pts, pts[1:]))
     aloft = [p[3] for p in pts if p[3] > 0]
-    rec = {k: v for k, v in f.items() if k not in ("points", "group", "owner_key")}
+    rec = {k: v for k, v in f.items()
+           if k not in ("points", "group", "owner_key", "aircraft")}
     rec.update(miles=round(km / 1.609),
                alt_ft=round(statistics.median(aloft) / 50) * 50 if aloft else None,
                path=sketch(pts))
@@ -183,6 +190,7 @@ def day_report(flights, residents_10):
             "heard": sum(f["heard"] for f in flights),
             "heard_non_essential": sum(f["heard"] for f in non_essential),
             "residents_10": residents_10, "night": len(night),
+            "median_year": median_year(flights),
         },
         "owners": owner_rows,
         "heliports": [{"name": name, "cats": by_category(fs), "flights": len(fs),
@@ -191,7 +199,8 @@ def day_report(flights, residents_10):
                        (f for f in flights if f["group"] == g),
                        key=lambda f: -f["heard"])[:RANK_PER_GROUP]] for g in cfg.GROUPS},
         "fleet": sorted(({"type": code, "cats": by_category(fs), "flights": len(fs),
-                          "year": median_year(fs), "heard": sum(f["heard"] for f in fs)}
+                          "aircraft": len({f["aircraft"] for f in fs}),
+                          "built": year_range(fs), "heard": sum(f["heard"] for f in fs)}
                          for code, fs in types.items()), key=lambda t: -t["heard"]),
     }
 
@@ -257,7 +266,7 @@ def main():
                 "peak": e["peak"]["all"], "reached": e["reached"],
             })
             summaries.append({
-                "day": day, "id": out[-1]["id"], "cat": f["category"],
+                "day": day, "id": out[-1]["id"], "aircraft": a["id"], "cat": f["category"],
                 "group": group_of[f["category"]], "type": a["type"], "year": a["year"],
                 "reg": a["reg"], "owner": a["owner"], "withheld": a["withheld"],
                 "owner_key": ("withheld" if a["withheld"] else a["owner"] or

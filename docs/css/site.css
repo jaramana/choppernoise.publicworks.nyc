@@ -305,8 +305,38 @@ details[open] > summary { margin-bottom: .75rem; }
 .non-essential  { --group: var(--non-essential); }
 .public-service { --group: var(--public-service); }
 
-.report-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-.report-day .day-select { font-size: 1rem; padding: .45rem .7rem; }
+/* The date is the title. The day bar keeps it in view while the page
+   scrolls, below the masthead where the masthead sticks. Its picker is the
+   map's, drawn larger. */
+.report .eyebrow { margin-bottom: .2rem; }
+.day-bar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 1rem 1.5rem; flex-wrap: wrap;
+  margin: 1.5rem 0 0; padding: .7rem 0;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+:root:has(.day-bar) { scroll-padding-top: 4.5rem; }
+@media (min-width: 60rem) and (hover: hover) and (min-height: 34.01rem) {
+  .day-bar { top: var(--masthead-h); }
+  :root:has(.day-bar) { scroll-padding-top: calc(var(--masthead-h) + 4.5rem); }
+}
+.day-pick { display: flex; align-items: center; gap: .6rem; }
+.day-pick-label {
+  font-size: .72rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.day-bar .day-select {
+  flex: none; font-size: 1.05rem; padding: .5rem .8rem;
+  border: 1.5px solid var(--accent); color: var(--accent-ink); background: var(--accent-soft);
+}
+.day-jump { display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: .9rem; }
+.day-jump a { color: var(--ink-soft); text-decoration: none; }
+.day-jump a:hover { color: var(--accent); }
+@media (max-width: 40rem) {
+  .day-pick, .day-bar .day-select { width: 100%; }
+  .day-bar .day-select { flex: 1; }
+  .day-jump { display: none; }
+}
 .report .note { font-size: .92rem; color: var(--ink-soft); max-width: 44rem; }
 
 .tiles { display: grid; gap: 1rem; margin-top: 1rem; grid-template-columns: repeat(4, 1fr); }
