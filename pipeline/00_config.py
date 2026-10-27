@@ -137,6 +137,23 @@ TOUR_BASES = {
     "Linden": (40.6174, -74.2446),
 }
 BASE_RADIUS_KM = 1.5
+
+# The Report page credits a flight to a heliport when it starts or ends this
+# close to one, below PAD_FT. A flight that enters or leaves at the map's edge
+# is credited to none.
+HELIPORTS = {
+    "Downtown Manhattan Heliport": (40.7012, -74.0090),
+    "East 34th Street Heliport": (40.7424, -73.9718),
+    "West 30th Street Heliport": (40.7546, -74.0071),
+    "Kearny": (40.7300, -74.1170),
+    "Linden": (40.6174, -74.2446),
+}
+PAD_RADIUS_KM = 0.8
+PAD_FT = 1000
+
+# Night, for the Report page: local hours from NIGHT_START to NIGHT_END.
+NIGHT_START, NIGHT_END = 22, 7
+
 STATUE = (40.6892, -74.0445)
 STATUE_RADIUS_KM = 1.0
 

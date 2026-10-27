@@ -36,7 +36,8 @@
 
     minutes: function (s) {
       var m = Math.round(s / 60);
-      return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min';
+      if (m < 60) return m + ' min';
+      return Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + m % 60 + ' min' : '');
     },
 
     // 2026-08-15 as 15 August 2026.
@@ -111,7 +112,7 @@
 
   var PAGES = [
     { href: 'index.html',   nav: 'Map' },
-    { href: 'flights.html', nav: 'Flights' },
+    { href: 'report.html',  nav: 'Report' },
     { href: 'data.html',    nav: 'Data' },
     { href: 'about.html',   nav: 'About' }
   ];
@@ -159,7 +160,7 @@
         '<div class="wrap"><div class="footer-grid">' +
           '<div><h2 class="footer-head">Views</h2><ul>' +
             '<li><a href="index.html">Map</a></li>' +
-            '<li><a href="flights.html">Flights</a></li>' +
+            '<li><a href="report.html">Report</a></li>' +
           '</ul></div>' +
           '<div><h2 class="footer-head">Reference</h2><ul>' +
             '<li><a href="data.html">Data</a></li>' +

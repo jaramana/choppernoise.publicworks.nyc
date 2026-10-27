@@ -297,21 +297,46 @@ details[open] > summary { margin-bottom: .75rem; }
 }
 
 
-/* ---- Flights page ----------------------------------------------- */
-/* Two short answers on a reading page, full width, one column. Each group
-   keeps its map color: rose for non-essential, blue for public service. */
+/* ---- Report page ------------------------------------------------ */
+/* One recorded day on a reading page, full width, one column. Tables are
+   short and ranked; each group keeps its map color, rose for non-essential
+   and blue for public service. */
 
 .non-essential  { --group: var(--non-essential); }
 .public-service { --group: var(--public-service); }
 
-.ranked { display: grid; gap: 2rem; margin-top: 1rem; }
+.report-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.report-day .day-select { font-size: 1rem; padding: .45rem .7rem; }
+.report .note { font-size: .92rem; color: var(--ink-soft); max-width: 44rem; }
 
-/* Hold the filled height while fleet.json loads, so nothing below jumps.
-   Measured on a wide screen and on a 412 px phone. */
-.ranked:empty { min-height: 84rem; }
-.years:empty  { min-height: 14.5rem; }
-@media (max-width: 47.99rem) { .ranked:empty { min-height: 99rem; } }
-@media (max-width: 40rem)    { .years:empty  { min-height: 24rem; } }
+.tiles { display: grid; gap: 1rem; margin-top: 1rem; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 47.99rem) {
+  .tiles { grid-template-columns: repeat(2, 1fr); gap: .6rem; }
+  .tile { padding: .8rem .9rem; }
+  .tile-num { font-size: 1.45rem !important; }
+}
+.tile {
+  background: var(--paper-raised); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 1rem 1.2rem; box-shadow: var(--shadow-tight);
+}
+.tile p { margin: 0; max-width: none; }
+.tile-num { font-size: clamp(1.7rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+.tile-label { font-weight: 600; margin-top: .3rem !important; }
+.tile-sub { font-size: .85rem; color: var(--ink-faint); }
+
+.table-wrap.wide { max-width: none; }
+.document td.cats { color: var(--ink-soft); font-size: .85rem; }
+.document td.owner { font-size: .85rem; letter-spacing: .01em; }
+.document td.owner-plain { font-style: italic; color: var(--ink-soft); }
+.document td.share { width: 8rem; min-width: 6rem; }
+.share-num { display: block; font-size: .85rem; }
+.share-bar { display: block; height: 3px; margin-top: .2rem; border-radius: 2px; background: var(--ink-faint); }
+@media (max-width: 40rem) {
+  .document .wide-only { display: none; }
+  .report table th, .report table td { padding: .45rem .55rem; }
+}
+
+.ranked { display: grid; gap: 2rem; margin-top: 1rem; }
 .ranked h3 { display: flex; align-items: center; gap: .5rem; margin: 0 0 .5rem; font-size: 1rem; }
 .swatch { width: .7rem; height: .7rem; border-radius: 50%; background: var(--group); }
 .document .ranked ol { list-style: none; padding: 0; margin: 0; max-width: none; }
@@ -339,28 +364,6 @@ details[open] > summary { margin-bottom: .75rem; }
 @media (max-width: 47.99rem) {
   .flight { grid-template-columns: 5rem 1fr; gap: .3rem 1rem; align-items: start; }
   .flight .sketch { grid-row: 1 / span 3; align-self: center; }
-}
-
-.years { margin-top: 1rem; }
-.year-row {
-  display: grid; grid-template-columns: 6.5rem 9rem 1fr; gap: 1.5rem; align-items: center;
-  padding: .35rem 0; border-top: 1px solid var(--rule);
-}
-.year-cat { font-weight: 600; }
-.year-num { font-size: 1.1rem; font-weight: 700; }
-.year-none { font-size: .85rem; color: var(--ink-faint); }
-.strip { display: block; width: 100%; height: 30px; overflow: visible; }
-.strip circle { fill: var(--group); fill-opacity: .55; stroke: var(--group); stroke-width: .75; }
-.strip-rule { stroke: var(--rule); }
-.year-axis-row { border-top: 0; padding-top: 0; }
-.years-axis { position: relative; height: 1.2rem; font-size: .75rem; color: var(--ink-faint); }
-.years-axis span { position: absolute; transform: translateX(-50%); }
-.years-axis span:first-child { transform: none; }
-
-@media (max-width: 40rem) {
-  .year-row { grid-template-columns: 1fr auto; gap: .2rem 1rem; }
-  .year-row .strip, .year-row .year-none, .years-axis { grid-column: 1 / -1; }
-  .year-axis-row > span:empty { display: none; }
 }
 
 

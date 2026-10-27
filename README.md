@@ -42,15 +42,18 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
   New York City and 2.83 million in New Jersey. Riders are certified seats minus
   one pilot, an upper bound.
 - Privacy: the map's files carry no registration, owner or transponder address,
-  and flights are numbered within each day. `fleet.json` names the registration
-  and registered owner of the ten ranked flights, unless the aircraft is LADD or
-  on a privacy address. Aircraft on the FAA's LADD list or a privacy address are
+  and flights are numbered within each day. `report.json` names registered
+  owners, and the registration of each ranked flight, unless the aircraft is
+  LADD or on a privacy address. Aircraft on the FAA's LADD list or a privacy address are
   counted like the rest. Year built is looked up before a registration is
   withheld, so LADD aircraft keep it.
-- Flights page: stage 6 writes `fleet.json`, with the five flights in each
-  group that reached the most residents at 60+ dBA and the median year built
-  per flight in each category. Military aircraft are not in the FAA registry
-  and have no year built.
+- Report page: stage 6 writes `report.json`, one record per day. Summary
+  counts flights, times heard (one resident hearing one flight at 60+ dBA),
+  residents who heard 10+ flights and night flights (starting 10 pm to 7 am).
+  Owners, Heliports and Fleet rank by times heard; a flight counts at a
+  heliport when it starts or ends within 0.8 km of it below 1,000 ft. Flights
+  lists the five most-heard flights per group. Military aircraft are not in
+  the FAA registry and have no year built.
 - Limits: levels are modeled outdoor peaks at one ground-level point per block
   and have not yet been checked against a measured flyover. The 10-second
   sampling can miss close passes, so counts at 70 and 80 dBA are probably low.

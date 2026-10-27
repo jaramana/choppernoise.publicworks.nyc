@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Report · Chopper Noise</title>
+<meta name="description" content="One recorded day of helicopter flights over New York City in numbers: owners, heliports, the most-heard flights and the fleet.">
+<link rel="canonical" href="https://choppernoise.publicworks.nyc/report.html">
+<meta property="og:title" content="Report · Chopper Noise">
+<meta property="og:description" content="One recorded day of helicopter flights over New York City in numbers: owners, heliports, the most-heard flights and the fleet.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#fbfaf7">
+<link rel="stylesheet" href="css/site.css?v=20261027">
+<script src="js/site.js?v=20261027" defer></script>
+<script src="js/report.js?v=20261027" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header data-chrome="masthead"></header>
+
+<main id="main" class="document wrap report">
+  <div class="report-head">
+    <h1>Report</h1>
+    <label class="report-day"><span class="sr-only">Day</span><select class="day-select" id="day"></select></label>
+  </div>
+  <p class="lead">One recorded day in numbers: who flew, from where, and how often residents heard them.</p>
+
+  <section id="summary">
+    <h2>Summary</h2>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section id="owners">
+    <h2>Owners</h2>
+    <p class="note">Owners as the FAA registers them, ranked by times heard. One time heard is one resident hearing one flight at 60+ dBA.</p>
+    <div class="table-wrap wide"><table id="owner-table"></table></div>
+  </section>
+
+  <section id="heliports">
+    <h2>Heliports</h2>
+    <p class="note" id="pad-note">Flights that started or ended at each heliport.</p>
+    <div class="table-wrap wide"><table id="pad-table"></table></div>
+  </section>
+
+  <section id="flights">
+    <h2>Flights</h2>
+    <p class="note">The five flights in each group that the most residents heard at 60+ dBA.</p>
+    <div class="ranked" id="ranked"></div>
+  </section>
+
+  <section id="fleet">
+    <h2>Fleet</h2>
+    <p class="note">Each helicopter type, with its certified loudness at 150 m and the median year built across its flights.</p>
+    <div class="table-wrap wide"><table id="fleet-table"></table></div>
+  </section>
+</main>
+
+<footer data-chrome="footer"></footer>
+</body>
+</html>
