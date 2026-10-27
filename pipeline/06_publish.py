@@ -116,11 +116,6 @@ def sketch(points):
                                       round((p[2] - cfg.BBOX["west"]) / CELL_LON, 1))]
 
 
-def median_year(flights):
-    known = [f["year"] for f in flights if f["year"]]
-    return round(statistics.median(known)) if known else None
-
-
 def by_category(flights):
     out = {}
     for f in flights:
@@ -187,7 +182,6 @@ def day_report(flights, residents_10):
             "heard_non_essential": sum(f["heard"] for f in non_essential),
             "residents_10": residents_10,
             "aboard": sum(f["riders"] or 0 for f in flights),
-            "median_year": median_year(flights),
         },
         "owners": owner_rows,
         "heliports": [{"name": name, "cats": by_category(fs), "flights": len(fs),

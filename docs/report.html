@@ -29,7 +29,7 @@
       <select class="day-select" id="day"></select>
     </label>
     <nav class="day-jump" aria-label="Sections">
-      <a href="#summary">Summary</a><a href="#owners">Owners</a><a href="#heliports">Heliports</a><a href="#flights">Flights</a><a href="#aircraft">Aircraft</a>
+      <a href="#summary">Summary</a><a href="#owners">Owners</a><a href="#aircraft">Aircraft</a><a href="#heliports">Heliports</a><a href="#flights">Flights</a>
     </nav>
   </div>
 
@@ -44,6 +44,12 @@
     <div class="table-wrap wide"><table id="owner-table"></table></div>
   </section>
 
+  <section id="aircraft">
+    <h2>Aircraft</h2>
+    <p class="note">The ten aircraft heard most this day, by registration.</p>
+    <div class="table-wrap wide"><table id="aircraft-table"></table></div>
+  </section>
+
   <section id="heliports">
     <h2>Heliports</h2>
     <p class="note" id="pad-note">Flights that started or ended at each heliport.</p>
@@ -54,12 +60,6 @@
     <h2>Flights</h2>
     <p class="note">The five flights in each group that the most residents heard at 60+ dBA.</p>
     <div class="ranked" id="ranked"></div>
-  </section>
-
-  <section id="aircraft">
-    <h2>Aircraft</h2>
-    <p class="note" id="aircraft-note">The ten aircraft heard most, by registration.</p>
-    <div class="table-wrap wide"><table id="aircraft-table"></table></div>
   </section>
 </main>
 

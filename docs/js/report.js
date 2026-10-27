@@ -2,7 +2,7 @@
    ------------------------------------------------------------------
    One recorded day in numbers, from report.json. A day picker, as on
    the map, opens on the same median day and follows ?day=. Summary
-   gives four numbers; Owners, Heliports and Aircraft are short tables
+   gives four numbers; Owners, Aircraft and Heliports are short tables
    ranked by times heard; Flights lists the five most-heard flights in
    each group with a sketch of each path. One time heard is one resident
    hearing one flight at 60+ dBA. Loads after site.js. */
@@ -75,9 +75,9 @@
     var r = report.days[day];
     renderTiles(r.summary);
     renderOwners(r);
+    renderAircraft(r);
     renderPads(r);
     renderRanked(r.ranked);
-    renderAircraft(r);
   }
 
   // ---- Shared pieces ------------------------------------------------
@@ -234,9 +234,6 @@
 
   function renderAircraft(r) {
     var total = r.summary.heard;
-    $('aircraft-note').textContent = 'The ten aircraft heard most this day, by registration. ' +
-      (r.summary.median_year ? 'Half of the day’s flights used a helicopter built in ' +
-        r.summary.median_year + ' or earlier.' : '');
     table('aircraft-table', [
       { label: 'Registration' }, { label: 'Type' }, { label: 'Built', num: true },
       { label: 'Owner', wide: true }, { label: 'Flights by category', wide: true },
