@@ -86,8 +86,8 @@ def correct_altitude(points, setting):
         p[3] = round(p[3] + (setting[k][1] - cfg.STANDARD_INHG) * cfg.FT_PER_INHG)
 
 
-def registry_seats(regs):
-    """{N-number: certified seats} for the given registrations."""
+def registry(regs):
+    """{N-number: (certified seats, year built)} for the given registrations."""
     path = cfg.FAA / "ReleasableAircraft.zip"
     if not path.exists():
         cfg.FAA.mkdir(parents=True, exist_ok=True)
@@ -101,26 +101,31 @@ def registry_seats(regs):
             return csv.DictReader(io.TextIOWrapper(z.open(name), "utf-8-sig"))
         models = {r["CODE"].strip(): int(r["NO-SEATS"])
                   for r in table("ACFTREF.txt") if r["NO-SEATS"].strip().isdigit()}
-        return {"N" + r["N-NUMBER"].strip(): models.get(r["MFR MDL CODE"].strip())
+        def year(r):
+            y = r["YEAR MFR"].strip()
+            return int(y) if y.isdigit() else None
+        return {"N" + r["N-NUMBER"].strip(): (models.get(r["MFR MDL CODE"].strip()), year(r))
                 for r in table("MASTER.txt") if r["N-NUMBER"].strip() in wanted}
 
 
-def seat_counts(all_tracks):
-    """Seats per ICAO address. Aircraft without a US registration take the
-    median of their type among the aircraft that have one."""
-    seats = registry_seats({a["reg"] for t in all_tracks for a in t})
+def registry_facts(all_tracks):
+    """(seats, year built) per ICAO address. Aircraft without a US registration
+    take the median seats of their type among the aircraft that have one, and
+    no year."""
+    reg = registry({a["reg"] for t in all_tracks for a in t})
     by_type = {}
     for t in all_tracks:
         for a in t:
-            if seats.get(a["reg"]):
-                by_type.setdefault(a["type"], []).append(seats[a["reg"]])
+            seats = reg.get(a["reg"], (None, None))[0]
+            if seats:
+                by_type.setdefault(a["type"], []).append(seats)
     out = {}
     for t in all_tracks:
         for a in t:
-            n = seats.get(a["reg"])
-            if n is None and by_type.get(a["type"]):
-                n = round(statistics.median(by_type[a["type"]]))
-            out[a["hex"]] = n
+            seats, year = reg.get(a["reg"], (None, None))
+            if seats is None and by_type.get(a["type"]):
+                seats = round(statistics.median(by_type[a["type"]]))
+            out[a["hex"]] = (seats, year)
     return out
 
 
@@ -208,11 +213,12 @@ def category(aircraft, flight):
     return "charter"
 
 
-def public_record(a, withheld_count, seats):
+def public_record(a, withheld_count, seats, year):
     """What the site may show about an aircraft.
 
     Withheld aircraft are numbered within the day. A hash of the address would
-    be reversible, since there are only 16 million addresses to try.
+    be reversible, since there are only 16 million addresses to try. They keep
+    their year built, which is looked up before the registration is dropped.
     """
     hidden = a["flags"] & (cfg.FLAG_LADD | cfg.FLAG_PIA) or a["hex"].startswith("~")
     if hidden:
@@ -222,6 +228,7 @@ def public_record(a, withheld_count, seats):
         rec = {"id": a["hex"], "reg": a["reg"], "owner": a["owner"],
                "type": a["type"], "withheld": False}
     rec["seats"] = seats
+    rec["year"] = year
     rec["riders_max"] = max(seats - cfg.PILOTS, 0) if seats else None
     return rec
 
@@ -229,7 +236,7 @@ def public_record(a, withheld_count, seats):
 def main():
     all_tracks = {day: json.loads((cfg.STAGING / ("tracks_%s.json" % day)).read_text())
                   for day in cfg.DAYS}
-    seats = seat_counts(all_tracks.values())
+    facts = registry_facts(all_tracks.values())
     for day in cfg.DAYS:
         tracks = all_tracks[day]
         setting = altimeter(day)
@@ -238,7 +245,7 @@ def main():
         out = []
         withheld = 0
         for a in tracks:
-            rec = public_record(a, withheld + 1, seats[a["hex"]])
+            rec = public_record(a, withheld + 1, *facts[a["hex"]])
             withheld += rec["withheld"]
             for n, flight in enumerate(flights(a["points"])):
                 out.append({"id": "%s-%d" % (rec["id"], n),

@@ -12,7 +12,7 @@ levels.
 | --- | --- |
 | [adsb.lol flight archive](https://github.com/adsblol/globe_history_2026) | Helicopter positions, types, owner names and privacy flags on 2 August, 15 August and 16 September 2026, and every day from 5 to 11 October 2026 |
 | [Census Bureau 2020 TIGER/Line blocks](https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2020.html) | Residents and a point inside each block, New York and New Jersey |
-| [FAA aircraft registry](https://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download) | Certified seats for each registered aircraft (files dated 2 October 2026) |
+| [FAA aircraft registry](https://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download) | Certified seats and year built for each registered aircraft (files dated 2 October 2026) |
 | [Iowa Environmental Mesonet ASOS archive](https://mesonet.agron.iastate.edu/request/download.phtml) | LaGuardia's hourly altimeter setting on the same days |
 | [UK CAA helicopter noise database](https://www.caa.co.uk/commercial-industry/aircraft/airworthiness/type-certificate-and-type-approval-data-sheets/part-21/noise-certificates/aircraft-noise-certificate/) | Certified flyover level of each type (edition of 1 September 2026) |
 
@@ -41,9 +41,16 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
   inside the box. That is 51,164 populated blocks, with 8.80 million residents in
   New York City and 2.83 million in New Jersey. Riders are certified seats minus
   one pilot, an upper bound.
-- Privacy: published files carry no registration, owner or transponder address,
-  and flights are numbered within each day. Aircraft on the FAA's LADD list or a
-  privacy address are counted like the rest.
+- Privacy: the map's files carry no registration, owner or transponder address,
+  and flights are numbered within each day. `fleet.json` names the registration
+  and registered owner of the ten ranked flights, unless the aircraft is LADD or
+  on a privacy address. Aircraft on the FAA's LADD list or a privacy address are
+  counted like the rest. Year built is looked up before a registration is
+  withheld, so LADD aircraft keep it.
+- Flights page: stage 6 writes `fleet.json`, with the five flights in each
+  group that reached the most residents at 60+ dBA and the median year built
+  per flight in each category. Military aircraft are not in the FAA registry
+  and have no year built.
 - Limits: levels are modeled outdoor peaks at one ground-level point per block
   and have not yet been checked against a measured flyover. The 10-second
   sampling can miss close passes, so counts at 70 and 80 dBA are probably low.

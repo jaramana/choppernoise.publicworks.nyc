@@ -110,9 +110,10 @@
   // Masthead and footer are written once here rather than on every page.
 
   var PAGES = [
-    { href: 'index.html', nav: 'Map' },
-    { href: 'data.html',  nav: 'Data' },
-    { href: 'about.html', nav: 'About' }
+    { href: 'index.html',   nav: 'Map' },
+    { href: 'flights.html', nav: 'Flights' },
+    { href: 'data.html',    nav: 'Data' },
+    { href: 'about.html',   nav: 'About' }
   ];
 
   // The disclaimer, word for word wherever it appears. Only the agency
@@ -158,6 +159,7 @@
         '<div class="wrap"><div class="footer-grid">' +
           '<div><h2 class="footer-head">Views</h2><ul>' +
             '<li><a href="index.html">Map</a></li>' +
+            '<li><a href="flights.html">Flights</a></li>' +
           '</ul></div>' +
           '<div><h2 class="footer-head">Reference</h2><ul>' +
             '<li><a href="data.html">Data</a></li>' +

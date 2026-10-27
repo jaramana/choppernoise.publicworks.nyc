@@ -951,7 +951,9 @@
       var f = state.view === 'replay' ? heliAt(e.point) : null;
       if (!f) { tip.hidden = true; return; }
       var it = current.items.filter(function (x) { return x.f === f; })[0];
-      tip.textContent = CATEGORY[f.cat] + ' · ' + typeName(f.type) + (it ? ' · ' + altitude(it.pos.alt) : '') +
+      tip.textContent = CATEGORY[f.cat] + ' · ' + typeName(f.type) +
+        (f.year ? ' · built ' + f.year : '') +
+        (it ? ' · ' + altitude(it.pos.alt) : '') +
         (f.riders ? ' · up to ' + f.riders + ' aboard' : '');
       tip.style.left = e.point.x + 'px';
       tip.style.top = e.point.y + 'px';
