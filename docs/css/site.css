@@ -305,10 +305,8 @@ details[open] > summary { margin-bottom: .75rem; }
 .non-essential  { --group: var(--non-essential); }
 .public-service { --group: var(--public-service); }
 
-/* The date is the title. The day bar keeps it in view while the page
-   scrolls, below the masthead where the masthead sticks. Its picker is the
-   map's, drawn larger. */
-.report .eyebrow { margin-bottom: .2rem; }
+/* The day bar keeps the date in view while the page scrolls, below the
+   masthead where the masthead sticks. Its picker is the map's. */
 .day-bar {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; gap: 1rem 1.5rem; flex-wrap: wrap;
@@ -325,10 +323,7 @@ details[open] > summary { margin-bottom: .75rem; }
   font-size: .72rem; font-weight: 700; letter-spacing: .1em;
   text-transform: uppercase; color: var(--ink-faint);
 }
-.day-bar .day-select {
-  flex: none; font-size: 1.05rem; padding: .5rem .8rem;
-  border: 1.5px solid var(--accent); color: var(--accent-ink); background: var(--accent-soft);
-}
+.day-bar .day-select { flex: none; font-size: 1rem; padding: .45rem .7rem; }
 .day-jump { display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: .9rem; }
 .day-jump a { color: var(--ink-soft); text-decoration: none; }
 .day-jump a:hover { color: var(--accent); }
@@ -358,6 +353,7 @@ details[open] > summary { margin-bottom: .75rem; }
 .document td.cats { color: var(--ink-soft); font-size: .85rem; }
 .document td.owner { font-size: .85rem; letter-spacing: .01em; }
 .document td.owner-plain { font-style: italic; color: var(--ink-soft); }
+.document td.reg { font-family: var(--mono); font-size: .85rem; white-space: nowrap; }
 .document td.share { width: 8rem; min-width: 6rem; }
 .share-num { display: block; font-size: .85rem; }
 .share-bar { display: block; height: 3px; margin-top: .2rem; border-radius: 2px; background: var(--ink-faint); }

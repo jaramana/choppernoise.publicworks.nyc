@@ -151,9 +151,6 @@ HELIPORTS = {
 PAD_RADIUS_KM = 0.8
 PAD_FT = 1000
 
-# Night, for the Report page: local hours from NIGHT_START to NIGHT_END.
-NIGHT_START, NIGHT_END = 22, 7
-
 STATUE = (40.6892, -74.0445)
 STATUE_RADIUS_KM = 1.0
 

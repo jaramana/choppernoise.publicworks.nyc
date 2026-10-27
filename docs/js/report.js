@@ -2,7 +2,7 @@
    ------------------------------------------------------------------
    One recorded day in numbers, from report.json. A day picker, as on
    the map, opens on the same median day and follows ?day=. Summary
-   gives four numbers; Owners, Heliports and Fleet are short tables
+   gives four numbers; Owners, Heliports and Aircraft are short tables
    ranked by times heard; Flights lists the five most-heard flights in
    each group with a sketch of each path. One time heard is one resident
    hearing one flight at 60+ dBA. Loads after site.js. */
@@ -71,23 +71,13 @@
     });
   }
 
-  // The date is the page's title, so a printout or a shared link says
-  // which day it covers.
-  function renderDate() {
-    var d = new Date(day + 'T00:00:00Z');
-    var weekday = d.toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
-    $('report-title').textContent = weekday + ' ' + fmt.date(day);
-    document.title = 'Report, ' + fmt.shortDate(day) + ' ' + day.slice(0, 4) + ' · Chopper Noise';
-  }
-
   function render() {
     var r = report.days[day];
-    renderDate();
     renderTiles(r.summary);
     renderOwners(r);
     renderPads(r);
     renderRanked(r.ranked);
-    renderFleet(r);
+    renderAircraft(r);
   }
 
   // ---- Shared pieces ------------------------------------------------
@@ -127,14 +117,11 @@
   }
 
   function renderTiles(s) {
-    var night = report.night;
     var tiles = [
       [fmt.num(s.flights), 'flights', pct(s.non_essential, s.flights) + ' tours and charters'],
       [big(s.heard), 'times heard at 60+ dBA', pct(s.heard_non_essential, s.heard) + ' from tours and charters'],
       [big(s.residents_10), 'residents heard 10+ flights', 'at 60+ dBA'],
-      [fmt.num(s.night), s.night === 1 ? 'night flight' : 'night flights',
-        'starting ' + fmt.clock(night[0] * 3600).replace(':00', '') + ' to ' +
-          fmt.clock(night[1] * 3600).replace(':00', '')]
+      [fmt.num(s.aboard), 'aboard, at most', 'seats minus one pilot, all flights']
     ];
     $('tiles').innerHTML = tiles.map(function (t) {
       return '<div class="tile"><p class="tile-num">' + esc(t[0]) + '</p>' +
@@ -243,34 +230,28 @@
     }).join('');
   }
 
-  // ---- Fleet --------------------------------------------------------
+  // ---- Aircraft -----------------------------------------------------
 
-  // Oldest to newest of the aircraft that flew: "1996–2024", or one year.
-  function built(range) {
-    if (!range) return '—';
-    return range[0] === range[1] ? String(range[0]) : range[0] + '–' + range[1];
-  }
-
-  function renderFleet(r) {
+  function renderAircraft(r) {
     var total = r.summary.heard;
-    var median = r.summary.median_year;
-    $('fleet-note').textContent = 'Each helicopter type, with its certified loudness at 150 m and the ' +
-      'oldest and newest of its aircraft that flew.' +
-      (median ? ' Half of this day’s flights used a helicopter built in ' + median + ' or earlier.' : '');
-    table('fleet-table', [
-      { label: 'Type' }, { label: 'Flights by category', wide: true }, { label: 'Aircraft', num: true },
-      { label: 'Flights', num: true }, { label: 'dBA at 150&nbsp;m', num: true }, { label: 'Built', num: true },
-      { label: 'Times heard', num: true }, { label: 'Share', wide: true }
-    ], r.fleet.map(function (t) {
-      var level = meta.types[t.type] || meta.types.unknown;
-      return '<tr><td>' + esc(typeName(t.type)) + '</td>' +
-        '<td class="cats wide-only">' + esc(cats(t.cats)) + '</td>' +
-        '<td class="num">' + fmt.num(t.aircraft) + '</td>' +
-        '<td class="num">' + fmt.num(t.flights) + '</td>' +
-        '<td class="num">' + (level ? level.l150.toFixed(1) : '—') + '</td>' +
-        '<td class="num">' + built(t.built) + '</td>' +
-        '<td class="num">' + esc(fmt.people(t.heard)) + '</td>' +
-        shareCell(t.heard, total) + '</tr>';
+    $('aircraft-note').textContent = 'The ten aircraft heard most this day, by registration. ' +
+      (r.summary.median_year ? 'Half of the day’s flights used a helicopter built in ' +
+        r.summary.median_year + ' or earlier.' : '');
+    table('aircraft-table', [
+      { label: 'Registration' }, { label: 'Type' }, { label: 'Built', num: true },
+      { label: 'Owner', wide: true }, { label: 'Flights by category', wide: true },
+      { label: 'Flights', num: true }, { label: 'Times heard', num: true }, { label: 'Share', wide: true }
+    ], r.aircraft.map(function (a) {
+      var owner = a.withheld ? '' : a.owner || (a.cats.military ? OWNER.military : OWNER.unlisted);
+      return '<tr><td class="' + (a.withheld ? 'owner-plain' : 'reg') + '">' +
+          esc(a.withheld ? 'Withheld' : a.reg || '—') + '</td>' +
+        '<td>' + esc(typeName(a.type)) + '</td>' +
+        '<td class="num">' + (a.year || '—') + '</td>' +
+        '<td class="owner wide-only">' + esc(owner) + '</td>' +
+        '<td class="cats wide-only">' + esc(cats(a.cats)) + '</td>' +
+        '<td class="num">' + fmt.num(a.flights) + '</td>' +
+        '<td class="num">' + esc(fmt.people(a.heard)) + '</td>' +
+        shareCell(a.heard, total) + '</tr>';
     }));
   }
 })();

@@ -12,7 +12,7 @@ Outputs in docs/data/:
     day-2026-08-02.json       flights on a 10-second clock, with stage 5 totals
     events-2026-08-02.json    flights heard per block, loaded for the day view
     report.json               each day's summary, owners, heliports, most-heard
-                              flights and fleet, for the Report page
+                              flights and aircraft, for the Report page
 
 Paths are resampled to the same 10-second step that stage 5 uses, aligned to
 local midnight so every flight shares one clock. Coordinates are integers in
@@ -38,13 +38,14 @@ EVENT_BANDS = [60, 70, 80]  # per-block counts for the day view's dots and the b
 
 # The Report page counts a flight as heard by every resident it reached at
 # REPORT_BAND, so a resident who heard ten flights counts ten times. It ranks
-# five flights per group and the top OWNER_ROWS owners. Ranked flights and
-# owners are named as registered, unless the aircraft is withheld (LADD or a
-# privacy address). Path sketches sit on a coarse outline of where residents
+# five flights per group, the top OWNER_ROWS owners and the top AIRCRAFT_ROWS
+# aircraft. Flights, owners and aircraft are named as registered, unless the
+# aircraft is withheld (LADD or a privacy address). Path sketches sit on a coarse outline of where residents
 # live, one cell per populated patch, at most SKETCH_POINTS per path.
 REPORT_BAND = 60
 RANK_PER_GROUP = 5
 OWNER_ROWS = 10
+AIRCRAFT_ROWS = 10
 CELL_LAT, CELL_LON = 0.006, 0.008  # about 660 m each way
 SKETCH_POINTS = 120
 
@@ -120,12 +121,6 @@ def median_year(flights):
     return round(statistics.median(known)) if known else None
 
 
-def year_range(flights):
-    """[oldest, newest] year built among the aircraft that flew, or None."""
-    known = [f["year"] for f in flights if f["year"]]
-    return [min(known), max(known)] if known else None
-
-
 def by_category(flights):
     out = {}
     for f in flights:
@@ -158,9 +153,7 @@ def ranked_record(f):
 
 
 def day_report(flights, residents_10):
-    """Summary, owners, heliports, most-heard flights and fleet for one day."""
-    night = [f for f in flights
-             if f["start"] < cfg.NIGHT_END * 3600 or f["start"] >= cfg.NIGHT_START * 3600]
+    """Summary, owners, heliports, most-heard flights and aircraft for one day."""
     non_essential = [f for f in flights if f["group"] == "non-essential"]
 
     owners = {}
@@ -180,16 +173,20 @@ def day_report(flights, residents_10):
         for name in {heliport(f["points"][0]), heliport(f["points"][-1])} - {None}:
             pads[name].append(f)
 
-    types = {}
+    # Aircraft are grouped by transponder address, or by the day's number for
+    # a withheld one; neither is published.
+    craft = {}
     for f in flights:
-        types.setdefault(f["type"] or "unknown", []).append(f)
+        craft.setdefault(f["aircraft"], []).append(f)
+    craft = sorted(craft.values(), key=lambda fs: -sum(f["heard"] for f in fs))
 
     return {
         "summary": {
             "flights": len(flights), "non_essential": len(non_essential),
             "heard": sum(f["heard"] for f in flights),
             "heard_non_essential": sum(f["heard"] for f in non_essential),
-            "residents_10": residents_10, "night": len(night),
+            "residents_10": residents_10,
+            "aboard": sum(f["riders"] or 0 for f in flights),
             "median_year": median_year(flights),
         },
         "owners": owner_rows,
@@ -198,10 +195,11 @@ def day_report(flights, residents_10):
         "ranked": {g: [ranked_record(f) for f in sorted(
                        (f for f in flights if f["group"] == g),
                        key=lambda f: -f["heard"])[:RANK_PER_GROUP]] for g in cfg.GROUPS},
-        "fleet": sorted(({"type": code, "cats": by_category(fs), "flights": len(fs),
-                          "aircraft": len({f["aircraft"] for f in fs}),
-                          "built": year_range(fs), "heard": sum(f["heard"] for f in fs)}
-                         for code, fs in types.items()), key=lambda t: -t["heard"]),
+        "aircraft": [{"reg": fs[0]["reg"], "owner": fs[0]["owner"],
+                      "withheld": fs[0]["withheld"], "type": fs[0]["type"],
+                      "year": fs[0]["year"], "cats": by_category(fs), "flights": len(fs),
+                      "heard": sum(f["heard"] for f in fs)}
+                     for fs in craft[:AIRCRAFT_ROWS]],
     }
 
 
@@ -304,7 +302,6 @@ def main():
 
     sizes["report.json"] = write("report.json", {
         "band": REPORT_BAND,
-        "night": [cfg.NIGHT_START, cfg.NIGHT_END],
         "pad": {"km": cfg.PAD_RADIUS_KM, "ft": cfg.PAD_FT},
         "days": report,
         "cells": {"rows": math.ceil((cfg.BBOX["north"] - cfg.BBOX["south"]) / CELL_LAT),

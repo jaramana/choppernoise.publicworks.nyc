@@ -49,12 +49,12 @@ Map tiles come from OpenFreeMap, with OpenStreetMap data.
   withheld, so LADD aircraft keep it.
 - Report page: stage 6 writes `report.json`, one record per day. Summary
   counts flights, times heard (one resident hearing one flight at 60+ dBA),
-  residents who heard 10+ flights and night flights (starting 10 pm to 7 am).
-  Owners, Heliports and Fleet rank by times heard; a flight counts at a
+  residents who heard 10+ flights and riders aboard at most. Owners, Heliports
+  and Aircraft rank by times heard; a flight counts at a
   heliport when it starts or ends within 0.8 km of it below 1,000 ft. Flights
-  lists the five most-heard flights per group. Fleet counts aircraft and
-  flights per type, with the oldest and newest year built among them; Summary
-  carries the day's median year built per flight. Military aircraft are not in
+  lists the five most-heard flights per group. Aircraft lists the ten most-heard
+  aircraft by registration, with type, year built and owner, and its note gives
+  the day's median year built per flight. Military aircraft are not in
   the FAA registry and have no year built.
 - Limits: levels are modeled outdoor peaks at one ground-level point per block
   and have not yet been checked against a measured flyover. The 10-second
